@@ -37,8 +37,6 @@ async function searchImages(evt) {
     list.innerHTML = '';
     page = 1;
 
-
-
     const { query } = evt.currentTarget.elements;
     searchInput = query.value.trim();
 
@@ -83,6 +81,7 @@ async function searchImages(evt) {
         loaderShow();
     }
 }
+
 async function imagesMore() {
     page += 1;
     loaderShow();
@@ -113,4 +112,4 @@ async function imagesMore() {
     } finally {
         loaderShow();
     }
-}
+};
