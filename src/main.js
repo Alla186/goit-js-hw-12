@@ -36,52 +36,53 @@ async function searchImages(evt) {
     evt.preventDefault();
     list.innerHTML = '';
     page = 1;
-}
-btnShow();
 
-const { query } = evt.currentTarget.elements;
-searchInput = query.value.trim();
 
-if (searchInput === '') {
-    iziToast.error({
-        title: 'Error',
-        message: 'The field cannot be empty!!!',
-        position: 'topRight',
-    });
-    return;
-};
 
-loaderShow();
+    const { query } = evt.currentTarget.elements;
+    searchInput = query.value.trim();
 
-   try {
-    const data = await gallery(searchInput, page);
-    if (data.hits.length === 0) {
-         iziToast.warning({
-            title: '',
-            message: 'Sorry, there are no images matching your search query. Please try again!',
+    if (searchInput === '') {
+        iziToast.error({
+            title: 'Error',
+            message: 'The field cannot be empty!!!',
             position: 'topRight',
-            timeout: '2000'
-         });
+        });
         return;
-    }
-    list.insertAdjacentHTML("beforeend", createMarkup(data.hits));
-    lightbox.refresh();
-    totalPages = Math.ceil(data.totalHits / 15);
+    };
 
-    if (page < totalPages) {
-        btnShow();
-    }
-    form.reset();
-    } catch (error) {
-    iziToast.error({
-                title: 'Error',
-                message: 'An error occurred while fetching data. Please try again later.',
-                position: 'topRight',
-            });
-    } finally {
     loaderShow();
-    }
 
+    try {
+        const data = await gallery(searchInput, page);
+        if (data.hits.length === 0) {
+            iziToast.warning({
+                title: '',
+                message: 'Sorry, there are no images matching your search query. Please try again!',
+                position: 'topRight',
+                timeout: '2000'
+            });
+            return;
+        }
+       
+        list.insertAdjacentHTML("beforeend", createMarkup(data.hits));
+        lightbox.refresh();
+        totalPages = Math.ceil(data.totalHits / 15);
+
+        if (page < totalPages) {
+            btnShow();
+        }
+        form.reset();
+    } catch (error) {
+        iziToast.error({
+            title: 'Error',
+            message: 'An error occurred while fetching data. Please try again later.',
+            position: 'topRight',
+        });
+    } finally {
+        loaderShow();
+    }
+}
 async function imagesMore() {
     page += 1;
     loaderShow();
